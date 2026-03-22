@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image to PowerPoint Converter</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Image → PowerPoint Converter</h1>
+      <p class="subtitle">画像ファイルをPowerPointスライドに変換します</p>
+    </header>
+
+    <main>
+      <!-- Upload Area -->
+      <section class="upload-section">
+        <div id="dropzone" class="dropzone">
+          <div class="dropzone-inner">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <p>画像をドラッグ&ドロップ</p>
+            <p class="hint">または</p>
+            <label class="btn btn-secondary" for="file-input">ファイルを選択</label>
+            <input id="file-input" type="file" accept="image/*" multiple hidden />
+            <p class="hint">JPG, PNG, GIF, BMP, WebP 対応</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Preview List -->
+      <section id="preview-section" class="preview-section hidden">
+        <div class="section-header">
+          <h2>画像リスト <span id="image-count" class="badge">0</span></h2>
+          <button id="clear-btn" class="btn btn-danger-outline">すべて削除</button>
+        </div>
+        <p class="hint">ドラッグして順序を変更できます</p>
+        <ul id="preview-list" class="preview-list"></ul>
+      </section>
+
+      <!-- Options -->
+      <section class="options-section">
+        <h2>変換オプション</h2>
+        <div class="options-grid">
+          <div class="option-group">
+            <label for="slide-size">スライドサイズ</label>
+            <select id="slide-size" name="slide_size">
+              <option value="16:9" selected>16:9 ワイドスクリーン</option>
+              <option value="4:3">4:3 スタンダード</option>
+              <option value="A4">A4 横向き</option>
+            </select>
+          </div>
+
+          <div class="option-group">
+            <label for="layout">レイアウト</label>
+            <select id="layout" name="layout">
+              <option value="contain" selected>Contain（余白あり・アスペクト比維持）</option>
+              <option value="fit">Fit（余白なし・アスペクト比維持）</option>
+              <option value="fill">Fill（スライド全体に拡大）</option>
+            </select>
+          </div>
+
+          <div class="option-group">
+            <label for="title-prefix">タイトルプレフィックス <span class="optional">(任意)</span></label>
+            <input id="title-prefix" type="text" name="title_prefix" placeholder="例: Slide" />
+            <p class="hint">入力するとスライド下部にファイル名付きタイトルを表示</p>
+          </div>
+
+          <div class="option-group" id="margin-group">
+            <label for="margin">マージン: <span id="margin-value">5</span>%</label>
+            <input id="margin" type="range" name="margin" min="0" max="20" value="5" step="1" />
+          </div>
+        </div>
+      </section>
+
+      <!-- Convert Button -->
+      <section class="convert-section">
+        <button id="convert-btn" class="btn btn-primary" disabled>
+          <span id="btn-text">変換してダウンロード</span>
+          <span id="btn-spinner" class="spinner hidden"></span>
+        </button>
+        <p id="error-msg" class="error-msg hidden"></p>
+      </section>
+    </main>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
