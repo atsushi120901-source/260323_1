@@ -315,3 +315,40 @@ section h2 {
 .hidden {
   display: none !important;
 }
+
+/* Output format radio */
+.output-format-group {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+/* Google Slides result */
+.slides-result {
+  margin-top: 1rem;
+  padding: 0.875rem 1rem;
+  background: #e8f5e9;
+  border: 1px solid #a5d6a7;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.slides-result a {
+  display: inline-block;
+  margin-top: 0.4rem;
+  color: #1a73e8;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.slides-result a:hover {
+  text-decoration: underline;
+}

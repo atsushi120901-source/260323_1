@@ -3,3 +3,5 @@ uvicorn[standard]
 python-pptx
 Pillow
 python-multipart
+google-api-python-client
+google-auth

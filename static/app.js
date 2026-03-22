@@ -12,6 +12,8 @@ const convertBtn = document.getElementById('convert-btn');
 const btnText = document.getElementById('btn-text');
 const btnSpinner = document.getElementById('btn-spinner');
 const errorMsg = document.getElementById('error-msg');
+const slidesResult = document.getElementById('slides-result');
+const slidesLink = document.getElementById('slides-link');
 const marginInput = document.getElementById('margin');
 const marginValue = document.getElementById('margin-value');
 const layoutSelect = document.getElementById('layout');
@@ -60,6 +62,15 @@ clearBtn.addEventListener('click', () => {
   files.forEach(f => URL.revokeObjectURL(f.objectUrl));
   files = [];
   renderList();
+});
+
+// Output format change: update button label
+document.querySelectorAll('input[name="output_format"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    const isGoogleSlides = document.querySelector('input[name="output_format"]:checked').value === 'google_slides';
+    btnText.textContent = isGoogleSlides ? 'Google Slidesに変換' : '変換してダウンロード';
+    slidesResult.classList.add('hidden');
+  });
 });
 
 // Convert
@@ -164,6 +175,9 @@ async function doConvert() {
 
   setLoading(true);
   hideError();
+  slidesResult.classList.add('hidden');
+
+  const outputFormat = document.querySelector('input[name="output_format"]:checked').value;
 
   const formData = new FormData();
   files.forEach(item => formData.append('files', item.file));
@@ -176,8 +190,10 @@ async function doConvert() {
     formData.append('title_prefix', titlePrefix);
   }
 
+  const endpoint = outputFormat === 'google_slides' ? '/convert/google-slides' : '/convert';
+
   try {
-    const response = await fetch('/convert', {
+    const response = await fetch(endpoint, {
       method: 'POST',
       body: formData,
     });
@@ -187,15 +203,21 @@ async function doConvert() {
       throw new Error(`サーバーエラー (${response.status}): ${text}`);
     }
 
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'presentation.pptx';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
+    if (outputFormat === 'google_slides') {
+      const data = await response.json();
+      slidesLink.href = data.url;
+      slidesResult.classList.remove('hidden');
+    } else {
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'presentation.pptx';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
   } catch (err) {
     showError(err.message || '変換中にエラーが発生しました');
   } finally {
@@ -204,8 +226,13 @@ async function doConvert() {
 }
 
 function setLoading(loading) {
-  convertBtn.disabled = loading;
-  btnText.textContent = loading ? '変換中...' : '変換してダウンロード';
+  const isGoogleSlides = document.querySelector('input[name="output_format"]:checked').value === 'google_slides';
+  convertBtn.disabled = loading || files.length === 0;
+  if (loading) {
+    btnText.textContent = '変換中...';
+  } else {
+    btnText.textContent = isGoogleSlides ? 'Google Slidesに変換' : '変換してダウンロード';
+  }
   btnSpinner.classList.toggle('hidden', !loading);
 }
 

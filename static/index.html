@@ -9,8 +9,8 @@
 <body>
   <div class="container">
     <header>
-      <h1>Image → PowerPoint Converter</h1>
-      <p class="subtitle">画像ファイルをPowerPointスライドに変換します</p>
+      <h1>Image → Slides Converter</h1>
+      <p class="subtitle">画像ファイルをPowerPoint / Google Slidesに変換します</p>
     </header>
 
     <main>
@@ -77,6 +77,21 @@
         </div>
       </section>
 
+      <!-- Output Format -->
+      <section class="options-section">
+        <h2>出力形式</h2>
+        <div class="output-format-group">
+          <label class="radio-label">
+            <input type="radio" name="output_format" value="pptx" checked />
+            PPTXダウンロード
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="output_format" value="google_slides" />
+            Google Slides
+          </label>
+        </div>
+      </section>
+
       <!-- Convert Button -->
       <section class="convert-section">
         <button id="convert-btn" class="btn btn-primary" disabled>
@@ -84,6 +99,10 @@
           <span id="btn-spinner" class="spinner hidden"></span>
         </button>
         <p id="error-msg" class="error-msg hidden"></p>
+        <div id="slides-result" class="slides-result hidden">
+          <p>Google Slidesが作成されました:</p>
+          <a id="slides-link" href="#" target="_blank" rel="noopener">Google Slidesで開く →</a>
+        </div>
       </section>
     </main>
   </div>
